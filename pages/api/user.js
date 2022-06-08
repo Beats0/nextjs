@@ -1,10 +1,12 @@
 const request = require('request');
 
+const timeout = 10000
+
 export default function handler(req, res) {
   const uid = req.query.uid
   request.get({
     url: `http://api.bilibili.com/x/web-interface/card?mid=${uid}`,
-    timeout: 10000,
+    timeout,
   }, (err, response, body) => {
     let result = body
     if (err) {
