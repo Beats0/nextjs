@@ -2,6 +2,10 @@
 const request = require('request');
 
 const timeout = 30000
+const proxyList = [
+  { "cdn.jsdelivr.net": "gcore.jsdelivr.net" },
+  { "fastly.jsdelivr.net": "gcore.jsdelivr.net" },
+]
 
 export default function handler(req, res) {
   let url = req.query.url
@@ -11,6 +15,14 @@ export default function handler(req, res) {
    */
   if (!/^https?:\/\/.+/.test(url)) {
     url = `https://${url}`
+  }
+  for (let i = 0; i < proxyList.length; i++) {
+    const item = proxyList[i]
+    const k = Object.keys(item)[0]
+    const v = item[k]
+    if (url.indexOf(k) != -1) {
+      url = url.replace(k, v)
+    }
   }
 
   request.get({
