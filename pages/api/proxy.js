@@ -1,11 +1,8 @@
-// /api/cdn?url=gcore.jsdelivr.net/gh/Beats0/beats0.github.io@master/img/avatar-beats0.jpg
+// /api/proxy?url=https://gcore.jsdelivr.net/gh/Beats0/beats0.github.io@master/img/avatar-beats0.jpg
+// /api/proxy?url=gcore.jsdelivr.net/gh/Beats0/beats0.github.io@master/img/avatar-beats0.jpg
 const request = require('request');
 
-const timeout = 30000
-const proxyList = [
-  { "cdn.jsdelivr.net": "gcore.jsdelivr.net" },
-  { "fastly.jsdelivr.net": "gcore.jsdelivr.net" },
-]
+const timeout = 60000
 
 export default function handler(req, res) {
   let url = req.query.url
@@ -15,14 +12,6 @@ export default function handler(req, res) {
    */
   if (!/^https?:\/\/.+/.test(url)) {
     url = `https://${url}`
-  }
-  for (let i = 0; i < proxyList.length; i++) {
-    const item = proxyList[i]
-    const k = Object.keys(item)[0]
-    const v = item[k]
-    if (url.indexOf(k) != -1) {
-      url = url.replace(k, v)
-    }
   }
 
   request.get({
