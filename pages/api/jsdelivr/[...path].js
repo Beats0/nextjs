@@ -21,7 +21,14 @@ export default function handler(req, res) {
       const headers = response.headers
       // set headers
       for (const key in headers) {
-        res.setHeader(key, headers[key])
+        if(key === 'cache-control') {
+          res.setHeader('cache-control', 'public, max-age=3600, s-maxage=3600')
+        } else if(key.toLowerCase() === 'etag') {
+          // auto set ETag
+        }
+         else {
+          res.setHeader(key, headers[key])
+        }
       }
       res.send(result)
     }
